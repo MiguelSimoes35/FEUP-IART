@@ -4,7 +4,7 @@
 
 using namespace std;
 
-void main() {
+int main() {
 
 	Game game;
 
@@ -12,6 +12,8 @@ void main() {
 
 
 	system("pause");
+
+	return 0;
 }
 
 
