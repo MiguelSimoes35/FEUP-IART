@@ -14,5 +14,6 @@ class Game
 public:
 	Game();
 	void start();
+	void pvp();
 };
 
