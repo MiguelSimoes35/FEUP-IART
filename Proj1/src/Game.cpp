@@ -1,11 +1,11 @@
 #include "Game.h"
 
+Game::Game(){
 
-
-Game::Game()
-{
 }
 
 void Game::start() {
-	opening_menu();
+	Board b = Board();
+	b.display_board();
+	b.count_p1_pieces();
 }

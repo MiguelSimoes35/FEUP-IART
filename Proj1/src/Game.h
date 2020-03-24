@@ -6,8 +6,7 @@
 
 using namespace std;
 
-class Game
-{
+class Game {
 	Board board;
 	Player player1;
 	Player player2;
@@ -15,4 +14,3 @@ public:
 	Game();
 	void start();
 };
-
