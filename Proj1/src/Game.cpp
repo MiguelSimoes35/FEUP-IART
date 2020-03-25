@@ -11,7 +11,10 @@ void Game::start() {
 	int pieces_player2 = b.count_p2_pieces();
 
 	cout << "Player 1 pieces: " << pieces_player1 << endl;
-	cout << "Player 2 pieces: " << pieces_player2 << endl;
+	cout << "Player 2 pieces: " << pieces_player2 << endl << endl << endl;
+
+	b.move_player1(7, 'C', 5, 'A');
+	b.display_board();
 }
 
 void Game::pvp() {

@@ -15,6 +15,7 @@ public:
 	~Piece();
 	string getColor();
 	int getPlayer();
+	void setPlayer(int player);
 	char getCharacter();
 	void setParameters();
 };
