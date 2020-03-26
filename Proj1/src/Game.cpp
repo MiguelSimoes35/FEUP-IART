@@ -15,6 +15,8 @@ void Game::start() {
 
 	b.move_player1(7, 'C', 5, 'A');
 	b.display_board();
+	b.capture_player1(7, 'F', 5, 'D');
+	b.display_board();
 }
 
 void Game::pvp() {

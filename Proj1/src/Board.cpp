@@ -37,6 +37,7 @@ Board::Board() {
 			game_state[i][j] = Piece(2);
 		}
 	}
+	game_state[5][4] = Piece(2);
 }
 
 void Board::display_board() {
@@ -77,6 +78,14 @@ int Board::count_p2_pieces() {
 	}
 
 	return counter;
+}
+
+void Board::check_piece1(int o_line, char o_col) {
+	//TODO
+}
+
+void Board::check_piece2(int o_line, char o_col) {
+	//TODO
 }
 
 void Board::move_player1(int o_line, char o_col, int d_line, char d_col) {
@@ -170,9 +179,80 @@ void Board::move_player1(int o_line, char o_col, int d_line, char d_col) {
 		}
 		break;
 	}
+	default:
+		//invalid move
+		//error
+		break;
 	}
 }
 
-void Board::move_player2(int o_line, char o_col, int d_line, char d_col) {
 
+void Board::move_player2(int o_line, char o_col, int d_line, char d_col) {
+	//TO DO
+}
+
+
+
+void Board::capture_player1(int o_line, char o_col, int d_line, char d_col) {
+	int delta_line = d_line - o_line;
+
+	int d_column = int(d_col) - 65;
+	int o_column = int(o_col) - 65;
+	int delta_col = d_column - o_column;
+
+	switch (delta_line) {
+	case -2: {
+		if (delta_col == -2) {
+			if (game_state[d_line - 1][d_column].getPlayer() == 0) {
+				if (game_state[d_line][d_column + 1].getPlayer() == 2) {
+
+					game_state[o_line - 1][o_column].setPlayer(0);
+					game_state[d_line - 1][d_column].setPlayer(1);
+					game_state[d_line][d_column + 1].setPlayer(0);
+				}
+				else {
+					//error
+					//not jumping over one of your's piece
+					cout << "ERROR 1!" << endl;
+				}
+			}
+			else {
+				//error
+				//moving to a non-empty cell...
+				cout << "ERROR 3!" << endl;
+			}
+		}
+		else if (delta_col == 0) {
+			
+		}
+		else if (delta_col == 2) {
+
+		}
+		else {
+			//error
+			//invalid move
+		}
+		break;
+	}
+	case 0: {
+		if (delta_col == -2) {
+
+		}
+		else if (delta_col == 2) {
+
+		}
+		else {
+			//error
+			//invalid move
+		}
+	}
+	default:
+		//error
+		//invalid move
+		break;
+	}
+}
+
+void Board::capture_player2(int o_line, char o_col, int d_line, char d_col) {
+	//TO DO
 }
