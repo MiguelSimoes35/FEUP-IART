@@ -12,6 +12,7 @@ void Game::start() {
 
 	cout << "Player 1 pieces: " << pieces_player1 << endl;
 	cout << "Player 2 pieces: " << pieces_player2 << endl << endl << endl;
+
 }
 
 void Game::pvp() {

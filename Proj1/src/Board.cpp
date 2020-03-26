@@ -79,12 +79,20 @@ int Board::count_p2_pieces() {
 	return counter;
 }
 
-void Board::check_piece1(int o_line, char o_col) {
-	//TODO
+bool Board::check_piece1(int o_line, char o_col) {
+	int o_column = int(o_col) - 65;
+	if (game_state[o_line - 1][o_column].getPlayer() == 1) {
+		return true;
+	}
+	return false;
 }
 
-void Board::check_piece2(int o_line, char o_col) {
-	//TODO
+bool Board::check_piece2(int o_line, char o_col) {
+	int o_column = int(o_col) - 65;
+	if (game_state[o_line - 1][o_column].getPlayer() == 2) {
+		return true;
+	}
+	return false;
 }
 
 void Board::move_player1(int o_line, char o_col, int d_line, char d_col) {
