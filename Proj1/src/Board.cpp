@@ -37,7 +37,6 @@ Board::Board() {
 			game_state[i][j] = Piece(2);
 		}
 	}
-	game_state[5][4] = Piece(2);
 }
 
 void Board::display_board() {
@@ -127,6 +126,7 @@ void Board::move_player1(int o_line, char o_col, int d_line, char d_col) {
 				else {
 					//error
 					//not jumping over one of your's piece
+					cout << "ERROR 8!" << endl;
 				}
 			}
 			else {
@@ -145,6 +145,7 @@ void Board::move_player1(int o_line, char o_col, int d_line, char d_col) {
 				else {
 					//error
 					//not jumping over one of your's piece
+					cout << "ERROR 9!" << endl;
 				}
 			}
 			else {
@@ -174,7 +175,7 @@ void Board::move_player1(int o_line, char o_col, int d_line, char d_col) {
 		}
 		else {
 			//error
-			//invalid move
+			//invalid line selection
 			cout << "ERROR 7!" << endl;
 		}
 		break;
@@ -212,39 +213,109 @@ void Board::capture_player1(int o_line, char o_col, int d_line, char d_col) {
 				}
 				else {
 					//error
-					//not jumping over one of your's piece
-					cout << "ERROR 1!" << endl;
+					//not capturing opponent's piece
+					cout << "ERROR 11!" << endl;
 				}
 			}
 			else {
 				//error
 				//moving to a non-empty cell...
-				cout << "ERROR 3!" << endl;
+				cout << "ERROR 12!" << endl;
 			}
 		}
 		else if (delta_col == 0) {
-			
+			if (game_state[d_line - 1][d_column].getPlayer() == 0) {
+				if (game_state[d_line][d_column].getPlayer() == 2) {
+
+					game_state[o_line - 1][o_column].setPlayer(0);
+					game_state[d_line - 1][d_column].setPlayer(1);
+					game_state[d_line][d_column].setPlayer(0);
+				}
+				else {
+					//error
+					//not capturing opponent's piece
+					cout << "ERROR 13!" << endl;
+				}
+			}
+			else {
+				//error
+				//moving to a non-empty cell...
+				cout << "ERROR 14!" << endl;
+			}
 		}
 		else if (delta_col == 2) {
+			if (game_state[d_line - 1][d_column].getPlayer() == 0) {
+				if (game_state[d_line][d_column - 1].getPlayer() == 2) {
 
+					game_state[o_line - 1][o_column].setPlayer(0);
+					game_state[d_line - 1][d_column].setPlayer(1);
+					game_state[d_line][d_column - 1].setPlayer(0);
+				}
+				else {
+					//error
+					//not capturing opponent's piece
+					cout << "Error 15!" << endl;
+				}
+			}
+			else {
+				//error
+				//moving to a non-empty cell...
+				cout << "ERROR 16!" << endl;
+			}
 		}
 		else {
 			//error
 			//invalid move
+			cout << "ERROR 17!" << endl;
 		}
 		break;
 	}
 	case 0: {
 		if (delta_col == -2) {
+			if (game_state[d_line - 1][d_column].getPlayer() == 0) {
+				if (game_state[d_line-1][d_column+1].getPlayer() == 2) {
 
+					game_state[d_line - 1][d_column].setPlayer(1);
+					game_state[d_line - 1][d_column + 1].setPlayer(0);
+					game_state[o_line-1][o_column].setPlayer(0);
+				}
+				else {
+					//error
+					//not capturing opponent's piece
+					cout << "Error 18!" << endl;
+				}
+			}
+			else {
+				//error
+				//moving to a non-empty cell...
+				cout << "ERROR 19!" << endl;
+			}
 		}
 		else if (delta_col == 2) {
+			if (game_state[d_line - 1][d_column].getPlayer() == 0) {
+				if (game_state[d_line - 1][d_column - 1].getPlayer() == 2) {
 
+					game_state[d_line - 1][d_column].setPlayer(1);
+					game_state[d_line - 1][d_column - 1].setPlayer(0);
+					game_state[o_line - 1][o_column].setPlayer(0);
+				}
+				else {
+					//error
+					//not capturing opponent's piece
+					cout << "Error 20!" << endl;
+				}
+			}
+			else {
+				//error
+				//moving to a non-empty cell...
+				cout << "ERROR 21!" << endl;
+			}
 		}
 		else {
 			//error
-			//invalid move
+			//invalid line selection
 		}
+		break;
 	}
 	default:
 		//error
