@@ -197,7 +197,102 @@ void Board::move_player1(int o_line, char o_col, int d_line, char d_col) {
 
 
 void Board::move_player2(int o_line, char o_col, int d_line, char d_col) {
-	//TO DO
+	int delta_line = d_line - o_line;
+
+	int d_column = int(d_col) - 65;
+	int o_column = int(o_col) - 65;
+	int delta_col = d_column - o_column;
+
+	switch (delta_line) {
+	case 1: {
+		if ((delta_col == -1) || (delta_col == 0) || (delta_col == 1)) {
+			if (game_state[d_line - 1][d_column].getPlayer() == 0) {
+				game_state[o_line - 1][o_column].setPlayer(0);
+				game_state[d_line - 1][d_column].setPlayer(2);
+			}
+			else {
+				//error
+				//moving to a non-empty cell
+				cout << "ERROR 31!" << endl;
+			}
+		}
+		else {
+			//error
+			//invalid move
+			cout << "ERROR 32!" << endl;
+		}
+		break;
+	}
+	case 2: {
+		if (delta_col == -2) {
+			if (game_state[d_line - 1][d_column].getPlayer() == 0) {
+				if (game_state[o_line][d_column + 1].getPlayer() == 2) {
+
+					game_state[o_line - 1][o_column].setPlayer(0);
+					game_state[d_line - 1][d_column].setPlayer(2);
+				}
+				else {
+					//error
+					//not jumping over one of your's piece
+					cout << "ERROR 33!" << endl;
+				}
+			}
+			else {
+				//error
+				//moving to a non-empty cell...
+				cout << "ERROR 34!" << endl;
+			}
+		}
+		else if (delta_col == 0) {
+			if (game_state[d_line - 1][d_column].getPlayer() == 0) {
+				if (game_state[o_line][d_column].getPlayer() == 2) {
+
+					game_state[o_line - 1][o_column].setPlayer(0);
+					game_state[d_line - 1][d_column].setPlayer(2);
+				}
+				else {
+					//error
+					//not jumping over one of your's piece
+					cout << "ERROR 35!" << endl;
+				}
+			}
+			else {
+				//error
+				//moving to a non-empty cell...
+				cout << "ERROR 36!" << endl;
+			}
+		}
+		else if (delta_col == 2) {
+			if (game_state[d_line - 1][d_column].getPlayer() == 0) {
+				if (game_state[o_line][d_column - 1].getPlayer() == 2) {
+
+					game_state[o_line - 1][o_column].setPlayer(0);
+					game_state[d_line - 1][d_column].setPlayer(2);
+				}
+				else {
+					//error
+					//not jumping over one of your's piece
+					cout << "Error 37!" << endl;
+				}
+			}
+			else {
+				//error
+				//moving to a non-empty cell...
+				cout << "ERROR 38!" << endl;
+			}
+		}
+		else {
+			//error
+			//invalid line selection
+			cout << "ERROR 39!" << endl;
+		}
+		break;
+	}
+	default:
+		//error
+		//invalid_move
+		break;
+	}
 }
 
 
