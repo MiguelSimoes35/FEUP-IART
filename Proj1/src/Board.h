@@ -20,4 +20,6 @@ public:
 	void move_player2(int o_line, char o_col, int d_line, char d_col);
 	void capture_player1(int o_line, char o_col, int d_line, char d_col);
 	void capture_player2(int o_line, char o_col, int d_line, char d_col);
+	void new_checkers_p1();
+	void new_checkers_p2();
 };
