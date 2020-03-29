@@ -467,12 +467,13 @@ void Board::recapture_player1(int o_line, int o_col) {
 		int selected;
 		cout << endl << "You can capture another piece, and that's mandatory" << endl;
 		cout << "You have more than one piece that can be captured, so you have to chose one!" << endl;
+		display_board();
+		cout << endl << "Spaces available to move and capture:" << endl;
 
 		for (int i = 0; i < counter; i++) {
-			cout << endl << "Spaces available to move and capture:" << endl;
 			cout << i+1 << " - [" << lines[i] << "][" << columns[i] << "]" << endl;
 		}
-		cout << "Select one space to move your piece!";
+		cout << "Select one space to move your piece:";
 		cin >> selected;
 		move_player1(o_line + 1, (char)(o_col + 65), lines[selected - 1] + 1, (char)(columns[selected - 1] + 65));
 	}
@@ -532,12 +533,13 @@ void Board::recapture_player2(int o_line, int o_col) {
 		int selected;
 		cout << endl << "You can capture another piece, and that's mandatory" << endl;
 		cout << "You have more than one piece that can be captured, so you have to chose one!" << endl;
+		display_board();
+		cout << endl << "Spaces available to move and capture:" << endl;
 
 		for (int i = 0; i < counter; i++) {
-			cout << endl << "Spaces available to move and capture:" << endl;
 			cout << i + 1 << " - [" << lines[i] << "][" << columns[i] << "]" << endl;
 		}
-		cout << "Select one space to move your piece!";
+		cout << "Select one space to move your piece:";
 		cin >> selected;
 		move_player2(o_line + 1, (char)(o_col + 65), lines[selected - 1] + 1, (char)(columns[selected - 1] + 65));
 	}
