@@ -2,12 +2,15 @@
 
 using namespace std;
 
-Node* newNode(int value, int depth) {
+Node* newNode(int value, int depth, int ol, char oc, int dl, char dc) {
 
 	Node* tmp = new Node;
 	tmp->value = value;
 	tmp->depth = depth;
-	
+	tmp->o_lin = ol;
+	tmp->o_col = oc;
+	tmp->d_lin = dl;
+	tmp->d_col = dc;
 	return tmp;
 
 }
@@ -64,12 +67,10 @@ int minimaxAB(Node* root, int depth, int alpha, int beta, bool maximizingPlayer)
 			maxVal = max(maxVal, val);
 			alpha = max(alpha, val);
 			if (beta <= alpha) {
-				cout << "pruning occurred ALPHA(" << alpha << ")" << " BETA(" << beta << ")" << endl;
+				//cout << "pruning occurred ALPHA(" << alpha << ")" << " BETA(" << beta << ")" << endl;
 				break;
 			}
-
 		}
-
 		return maxVal;
 	}
 	else {
@@ -79,19 +80,16 @@ int minimaxAB(Node* root, int depth, int alpha, int beta, bool maximizingPlayer)
 			minVal = min(minVal, val);
 			beta = min(beta, val);
 			if (beta <= alpha) {
-				cout << "pruning occurred ALPHA(" << alpha << ")" << " BETA(" << beta << ")" << endl;
+				//cout << "pruning occurred ALPHA(" << alpha << ")" << " BETA(" << beta << ")" << endl;
 				break;
 			}
 		}
-
 		return minVal;
 	}
 
 
 
-	return 0;
 }
-
 
 
 

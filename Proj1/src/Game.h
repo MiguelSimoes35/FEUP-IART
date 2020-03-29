@@ -14,4 +14,5 @@ public:
 	Game();
 	void start();
 	void pvp();
+	void pvc();
 };

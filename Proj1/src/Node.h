@@ -10,5 +10,7 @@ struct Node
 	int depth;
 	vector<Node*> children;
 
+	int o_lin, o_col, d_lin, d_col;
+
 };
 
