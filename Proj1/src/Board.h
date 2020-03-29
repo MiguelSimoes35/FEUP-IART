@@ -29,4 +29,5 @@ public:
 	bool can_move_player2(int o_line, char o_col, int d_line, char d_col);
 	void new_checkers_c1();
 	void new_checkers_c2();
+	void generateTree_d1(bool player1);
 };

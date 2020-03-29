@@ -508,11 +508,11 @@ int Board::evalGameState(bool player1) {
 			for (int j = 0; j < 8; j++) {
 				if (game_state[i][j].getPlayer() == 1) {
 					ret += 5;
-					ret += (8 - i);
+					//ret += (8 - i);
 				}
 				else if(game_state[i][j].getPlayer() == 2){
 					ret -= 5;
-					ret -= (i + 1);
+					//ret -= (i + 1);
 				}
 			}
 		}
@@ -522,11 +522,11 @@ int Board::evalGameState(bool player1) {
 			for (int j = 0; j < 8; j++) {
 				if (game_state[i][j].getPlayer() == 2) {
 					ret += 5;
-					ret += (i + 1);
+					//ret += (i + 1);
 				}
 				else if (game_state[i][j].getPlayer() == 1) {
 					ret -= 5;
-					ret -= (8 - i);
+					//ret -= (8 - i);
 				}
 			}
 		}
@@ -537,12 +537,14 @@ int Board::evalGameState(bool player1) {
 }
 
 void Board::generateTree(bool player1) {
-	Node* root = newNode(NULL, 2, 0, 0, 0, 0);
+	Node* root = newNode(NULL, 4, 0, 0, 0, 0);
 
 	Board tmpBoard;
 	tmpBoard = *this;
 
 	int child = 0;
+	int grandchild = 0;
+	int bigrandchild = 0;
 
 	if (player1) {
 		//first play - computer's play
@@ -557,7 +559,7 @@ void Board::generateTree(bool player1) {
 									tmpBoard.reach_endzone((aux1l + 1), colToChar(aux1c));
 									tmpBoard.new_checkers_c1();
 								}
-								root->children.push_back(newNode(NULL, 1, firstpl + 1, colToChar(firstpc), aux1l + 1, colToChar(aux1c)));
+								root->children.push_back(newNode(NULL, 3, firstpl + 1, colToChar(firstpc), aux1l + 1, colToChar(aux1c)));
 								//second play - adv's play
 								for (int secondpl = 0; secondpl < 8; secondpl++) {
 									for (int secondpc = 0; secondpc < 8; secondpc++) {
@@ -570,7 +572,56 @@ void Board::generateTree(bool player1) {
 															tmpBoard.reach_endzone((aux2l + 1), colToChar(aux2c));
 															tmpBoard.new_checkers_c2();
 														}
-														root->children.at(child)->children.push_back(newNode(tmpBoard.evalGameState(true), 0, secondpl + 1, colToChar(secondpc), aux2l + 1, colToChar(aux2c)));
+														root->children.at(child)->children.push_back(newNode(NULL, 2, secondpl + 1, colToChar(secondpc), aux2l + 1, colToChar(aux2c)));
+														Board tmpBoard2;
+														tmpBoard2 = tmpBoard;
+														//third play - computer's play
+														for (int thirdpl = 0; thirdpl < 8; thirdpl++) {
+															for (int thirdpc = 0; thirdpc < 8; thirdpc++) {
+																if (tmpBoard2.getCell(thirdpl, thirdpc).getPlayer() == 1) {
+																	for (int aux3l = 0; aux3l < 8; aux3l++) {
+																		for (int aux3c = 0; aux3c < 8; aux3c++) {
+																			if (tmpBoard2.check_free(aux3l + 1, colToChar(aux3c)) && tmpBoard2.can_move_player1(thirdpl + 1, colToChar(thirdpc), aux3l + 1, colToChar(aux3c))) {
+																				tmpBoard2.move_player1(thirdpl + 1, colToChar(thirdpc), aux3l + 1, colToChar(aux3c));
+																				if (aux3l == 0) {
+																					tmpBoard2.reach_endzone(aux3l + 1, colToChar(aux3c));
+																					tmpBoard2.new_checkers_c1();
+																				}
+																				root->children.at(child)->children.at(grandchild)->children.push_back(newNode(NULL, 1, thirdpl + 1, colToChar(thirdpc), aux3l + 1, colToChar(aux3c)));
+																				Board tmpBoard3;
+																				tmpBoard3 = tmpBoard2;
+																				//fourth play - player's turn
+																				for (int fourthpl = 0; fourthpl < 8; fourthpl++) {
+																					for (int fourthpc = 0; fourthpc < 8; fourthpc++) {
+																						if (tmpBoard3.getCell(fourthpl, fourthpc).getPlayer() == 2) {
+																							for (int aux4l = 0; aux4l < 8; aux4l++) {
+																								for (int aux4c = 0; aux4c < 8; aux4c++) {
+																									if (tmpBoard3.check_free(aux4l + 1, colToChar(aux4c)) && tmpBoard3.can_move_player1(fourthpl + 1, colToChar(fourthpc), aux4l+1, colToChar(aux4c))) {
+																										tmpBoard3.move_player1(fourthpl + 1, colToChar(fourthpc), aux4l + 1, colToChar(aux4c));
+																										if (aux4l == 7) {
+																											tmpBoard3.reach_endzone(aux4l + 1, colToChar(aux4c));
+																											tmpBoard3.new_checkers_c2();
+																										}
+																										root->children.at(child)->children.at(grandchild)->children.at(bigrandchild)->children.push_back(newNode(tmpBoard.evalGameState(true), 0, fourthpl + 1, colToChar(fourthpc), aux4l + 1, colToChar(aux4c)));
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+
+																				tmpBoard3 = tmpBoard2;
+																				bigrandchild++;
+																			}
+																		}
+																	}
+																}
+															}
+														}
+														
+														tmpBoard2 = tmpBoard;
+														grandchild++;
+														bigrandchild = 0;
 													}
 												}
 											}
@@ -580,6 +631,7 @@ void Board::generateTree(bool player1) {
 
 								tmpBoard = *this;
 								child++;
+								grandchild = 0;
 							}
 						}
 					}
@@ -588,13 +640,17 @@ void Board::generateTree(bool player1) {
 		}
 
 		//appplying minimax to the generated tree
-		int choice = minimaxAB(root, 2, -1000, 1000, true);
+		int choice = minimaxAB(root, 4, -1000, 1000, true);
 		int chosen_child;
 		for (int i = 0; i < root->children.size(); i++) {
-			for (int j = 0; j < root->children.at(i)->children.size(); j++) {				
-				if (root->children.at(i)->children.at(j)->value == choice) {
-					chosen_child = i;
-				}				
+			for (int j = 0; j < root->children.at(i)->children.size(); j++) {	
+				for (int k = 0; k < root->children.at(i)->children.at(j)->children.size(); k++) {
+					for (int l = 0; l < root->children.at(i)->children.at(j)->children.at(k)->children.size(); l++) {
+						if (root->children.at(i)->children.at(j)->children.at(k)->children.at(l)->value == choice) {
+							chosen_child = i;
+						}
+					}									
+				}								
 			}
 		}
 
@@ -629,13 +685,22 @@ void Board::generateTree(bool player1) {
 										if (tmpBoard.getCell(secondpl, secondpc).getPlayer() == 1) {
 											for (int aux2l = 0; aux2l < 8; aux2l++) {
 												for (int aux2c = 0; aux2c < 8; aux2c++) {
-													if (tmpBoard.check_free(aux2l + 1, colToChar(aux2c)) && tmpBoard.can_move_player2(secondpl + 1, colToChar(secondpc), aux2l + 1, colToChar(aux2c))) {
-														tmpBoard.move_player2(secondpl + 1, colToChar(secondpc), aux2l + 1, colToChar(aux2c));
+													if (tmpBoard.check_free(aux2l + 1, colToChar(aux2c)) && tmpBoard.can_move_player1(secondpl + 1, colToChar(secondpc), aux2l + 1, colToChar(aux2c))) {
+														tmpBoard.move_player1(secondpl + 1, colToChar(secondpc), aux2l + 1, colToChar(aux2c));
 														if (aux2l == 0) {
 															tmpBoard.reach_endzone((aux2l + 1), colToChar(aux2c));
 															tmpBoard.new_checkers_c1();
 														}
 														root->children.at(child)->children.push_back(newNode(tmpBoard.evalGameState(false), 0, secondpl + 1, colToChar(secondpc), aux2l + 1, colToChar(aux2c)));
+														/*//third play - computer's play
+														for (int thirdpl = 0; thirdpl < 8; thirdpl++) {
+															for (int thirdpc = 0; thirdpc < 8; thirdpc++) {
+																if(tmpBoard.getCell(thirdpl, thirdpc).getPlayer() == 1)
+															}
+														}*/
+													
+													
+													
 													}
 												}
 											}
@@ -903,19 +968,15 @@ void Board::new_checkers_c1() {
 	if (counter == 2) {
 		game_state[lines[0]][columns[0]] = Piece(1);
 		game_state[lines[1]][columns[1]] = Piece(1);
-		cout << "Only 2 spaces available to drop pieces." << endl << "2 pieces were drop automatically!" << endl << endl;
 	}
 	else if (counter == 1) {
 		game_state[lines[0]][columns[0]] = Piece(1);
-		cout << "Only 1 space available to drop pieces." << endl << "1 piece was drop automatically!" << endl << endl;
 	}
 	else if (counter == 0) {
-		cout << "No spaces available to drop pieces." << endl << "No piece was drop!" << endl << endl;
 	}
 	else {
 		game_state[lines[0]][columns[0]] = Piece(1);
 		game_state[lines[1]][columns[1]] = Piece(1);
-		cout << "2 pieces were drop automatically!" << endl << endl;
 	}
 }
 
@@ -939,18 +1000,154 @@ void Board::new_checkers_c2() {
 	if (counter == 2) {
 		game_state[lines[0]][columns[0]] = Piece(2);
 		game_state[lines[1]][columns[1]] = Piece(2);
-		cout << "Only 2 spaces available to drop pieces." << endl << "2 pieces were drop automatically!" << endl << endl;
 	}
 	else if (counter == 1) {
 		game_state[lines[0]][columns[0]] = Piece(2);
-		cout << "Only 1 space available to drop pieces." << endl << "1 piece was drop automatically!" << endl << endl;
 	}
 	else if (counter == 0) {
-		cout << "No spaces available to drop pieces." << endl << "No piece was drop!" << endl;
 	}
 	else {
 		game_state[lines[0]][columns[0]] = Piece(2);
 		game_state[lines[1]][columns[1]] = Piece(2);
-		cout << "2 pieces were drop automatically!" << endl << endl;
+	}
+}
+
+void Board::generateTree_d1(bool player1) {
+	Node* root = newNode(NULL, 2, 0, 0, 0, 0);
+
+	Board tmpBoard;
+	tmpBoard = *this;
+
+	int child = 0;
+
+	if (player1) {
+		//first play - computer's play
+		for (int firstpl = 0; firstpl < 8; firstpl++) {
+			for (int firstpc = 0; firstpc < 8; firstpc++) {
+				if (tmpBoard.getCell(firstpl, firstpc).getPlayer() == 1) {
+					for (int aux1l = 0; aux1l < 8; aux1l++) {
+						for (int aux1c = 0; aux1c < 8; aux1c++) {
+							if (tmpBoard.check_free(aux1l + 1, colToChar(aux1c)) && tmpBoard.can_move_player1(firstpl + 1, colToChar(firstpc), aux1l + 1, colToChar(aux1c))) {
+								tmpBoard.move_player1(firstpl + 1, colToChar(firstpc), aux1l + 1, colToChar(aux1c));
+								if (aux1l == 0) {
+									tmpBoard.reach_endzone((aux1l + 1), colToChar(aux1c));
+									tmpBoard.new_checkers_c1();
+								}
+								root->children.push_back(newNode(NULL, 1, firstpl + 1, colToChar(firstpc), aux1l + 1, colToChar(aux1c)));
+								//second play - adv's play
+								for (int secondpl = 0; secondpl < 8; secondpl++) {
+									for (int secondpc = 0; secondpc < 8; secondpc++) {
+										if (tmpBoard.getCell(secondpl, secondpc).getPlayer() == 2) {
+											for (int aux2l = 0; aux2l < 8; aux2l++) {
+												for (int aux2c = 0; aux2c < 8; aux2c++) {
+													if (tmpBoard.check_free(aux2l + 1, colToChar(aux2c)) && tmpBoard.can_move_player1(secondpl + 1, colToChar(secondpc), aux2l + 1, colToChar(aux2c))) {
+														tmpBoard.move_player1(secondpl + 1, colToChar(secondpc), aux2l + 1, colToChar(aux2c));
+														if (aux2l == 7) {
+															tmpBoard.reach_endzone((aux2l + 1), colToChar(aux2c));
+															tmpBoard.new_checkers_c2();
+														}
+														root->children.at(child)->children.push_back(newNode(tmpBoard.evalGameState(true), 0, secondpl + 1, colToChar(secondpc), aux2l + 1, colToChar(aux2c)));
+													}
+												}
+											}
+										}
+									}
+								}
+
+								tmpBoard = *this;
+								child++;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		//appplying minimax to the generated tree
+		int choice = minimaxAB(root, 2, -1000, 1000, true);
+		int chosen_child;
+		for (int i = 0; i < root->children.size(); i++) {
+			for (int j = 0; j < root->children.at(i)->children.size(); j++) {
+				if (root->children.at(i)->children.at(j)->value == choice) {
+					chosen_child = i;
+				}
+			}
+		}
+
+		//realizing the play
+		move_player1(root->children.at(chosen_child)->o_lin,
+			root->children.at(chosen_child)->o_col,
+			root->children.at(chosen_child)->d_lin,
+			root->children.at(chosen_child)->d_col);
+		if (root->children.at(chosen_child)->d_lin == 1) {
+			reach_endzone(root->children.at(chosen_child)->d_lin, root->children.at(chosen_child)->d_col);
+			new_checkers_c1();
+		}
+
+	}
+	else {
+		//first play - computer's play
+		for (int firstpl = 0; firstpl < 8; firstpl++) {
+			for (int firstpc = 0; firstpc < 8; firstpc++) {
+				if (tmpBoard.getCell(firstpl, firstpc).getPlayer() == 2) {
+					for (int aux1l = 0; aux1l < 8; aux1l++) {
+						for (int aux1c = 0; aux1c < 8; aux1c++) {
+							if (tmpBoard.check_free(aux1l + 1, colToChar(aux1c)) && tmpBoard.can_move_player2(firstpl + 1, colToChar(firstpc), aux1l + 1, colToChar(aux1c))) {
+								tmpBoard.move_player2(firstpl + 1, colToChar(firstpc), aux1l + 1, colToChar(aux1c));
+								if (aux1l == 7) {
+									tmpBoard.reach_endzone((aux1l + 1), colToChar(aux1c));
+									tmpBoard.new_checkers_c2();
+								}
+								root->children.push_back(newNode(NULL, 1, firstpl + 1, colToChar(firstpc), aux1l + 1, colToChar(aux1c)));
+								//second play - adv's play
+								for (int secondpl = 0; secondpl < 8; secondpl++) {
+									for (int secondpc = 0; secondpc < 8; secondpc++) {
+										if (tmpBoard.getCell(secondpl, secondpc).getPlayer() == 1) {
+											for (int aux2l = 0; aux2l < 8; aux2l++) {
+												for (int aux2c = 0; aux2c < 8; aux2c++) {
+													if (tmpBoard.check_free(aux2l + 1, colToChar(aux2c)) && tmpBoard.can_move_player2(secondpl + 1, colToChar(secondpc), aux2l + 1, colToChar(aux2c))) {
+														tmpBoard.move_player2(secondpl + 1, colToChar(secondpc), aux2l + 1, colToChar(aux2c));
+														if (aux2l == 0) {
+															tmpBoard.reach_endzone((aux2l + 1), colToChar(aux2c));
+															tmpBoard.new_checkers_c1();
+														}
+														root->children.at(child)->children.push_back(newNode(tmpBoard.evalGameState(false), 0, secondpl + 1, colToChar(secondpc), aux2l + 1, colToChar(aux2c)));
+													}
+												}
+											}
+										}
+									}
+								}
+
+								tmpBoard = *this;
+								child++;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		//appplying minimax to the generated tree
+		int choice = minimaxAB(root, 2, -1000, 1000, true);
+		int chosen_child;
+		for (int i = 0; i < root->children.size(); i++) {
+			for (int j = 0; j < root->children.at(i)->children.size(); j++) {
+				if (root->children.at(i)->children.at(j)->value == choice) {
+					chosen_child = i;
+				}
+			}
+		}
+
+		//realizing the play
+		move_player2(root->children.at(chosen_child)->o_lin,
+			root->children.at(chosen_child)->o_col,
+			root->children.at(chosen_child)->d_lin,
+			root->children.at(chosen_child)->d_col);
+
+		if (root->children.at(chosen_child)->d_lin == 8) {
+			reach_endzone(root->children.at(chosen_child)->d_lin, root->children.at(chosen_child)->d_col);
+			new_checkers_c2();
+		}
 	}
 }
