@@ -28,6 +28,12 @@ int Piece::getPlayer() {
 	return player;
 }
 
+void Piece::setPlayer(int player) {
+	this->player = player;
+	this->setParameters();
+}
+
+
 char Piece::getCharacter() {
 	return character;
 }
