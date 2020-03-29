@@ -14,6 +14,7 @@ public:
 	bool check_free(int o_line, char o_col);
 	bool move_player1(int o_line, char o_col, int d_line, char d_col);
 	bool move_player2(int o_line, char o_col, int d_line, char d_col);
+	void recapture_player1(int o_line, int o_col);
 	void reach_endzone(int o_line, char o_col);
 	void new_checkers_p1();
 	void new_checkers_p2();

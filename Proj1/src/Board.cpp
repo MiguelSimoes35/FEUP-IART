@@ -153,6 +153,7 @@ bool Board::move_player1(int o_line, char o_col, int d_line, char d_col) {
 				game_state[o_line - 1][o_column].setPlayer(0);
 				game_state[d_line - 1][d_column].setPlayer(1);
 				game_state[d_line][d_column + 1].setPlayer(0);
+				recapture_player1(d_line - 1, d_column);
 				return true;
 			}
 			else {
@@ -174,6 +175,7 @@ bool Board::move_player1(int o_line, char o_col, int d_line, char d_col) {
 				game_state[o_line - 1][o_column].setPlayer(0);
 				game_state[d_line - 1][d_column].setPlayer(1);
 				game_state[d_line][d_column].setPlayer(0);
+				recapture_player1(d_line - 1, d_column);
 				return true;
 			}
 			else {
@@ -195,6 +197,7 @@ bool Board::move_player1(int o_line, char o_col, int d_line, char d_col) {
 				game_state[o_line - 1][o_column].setPlayer(0);
 				game_state[d_line - 1][d_column].setPlayer(1);
 				game_state[d_line][d_column - 1].setPlayer(0);
+				recapture_player1(d_line - 1, d_column);
 				return true;
 			}
 			else {
@@ -219,6 +222,7 @@ bool Board::move_player1(int o_line, char o_col, int d_line, char d_col) {
 				game_state[d_line - 1][d_column].setPlayer(1);
 				game_state[d_line - 1][d_column + 1].setPlayer(0);
 				game_state[o_line - 1][o_column].setPlayer(0);
+				recapture_player1(d_line - 1, d_column);
 				return true;
 			}
 			else {
@@ -234,6 +238,7 @@ bool Board::move_player1(int o_line, char o_col, int d_line, char d_col) {
 				game_state[d_line - 1][d_column].setPlayer(1);
 				game_state[d_line - 1][d_column - 1].setPlayer(0);
 				game_state[o_line - 1][o_column].setPlayer(0);
+				recapture_player1(d_line - 1, d_column);
 				return true;
 			}
 			else {
@@ -401,6 +406,73 @@ bool Board::move_player2(int o_line, char o_col, int d_line, char d_col) {
 		cout << "Error! You have selected an invalid line to move." << endl;
 		return false;
 		break;
+	}
+}
+
+
+
+
+void Board::recapture_player1(int o_line, int o_col) {
+	int lines[5];
+	int columns[5];
+	int counter = 0;
+	if (game_state[o_line][o_col - 1].getPlayer() == 2) {
+		if (game_state[o_line][o_col - 2].getPlayer() == 0) {
+			lines[counter] = o_line;
+			columns[counter] = o_col - 2;
+			counter++;
+		}
+	}
+	if (game_state[o_line - 1][o_col - 1].getPlayer() == 2) {
+		if (game_state[o_line - 2][o_col - 2].getPlayer() == 0) {
+			lines[counter] = o_line - 2;
+			columns[counter] = o_col - 2;
+			counter++;
+		}
+	}
+	if (game_state[o_line - 1][o_col].getPlayer() == 2) {
+		if (game_state[o_line - 2][o_col].getPlayer() == 0) {
+			lines[counter] = o_line - 2;
+			columns[counter] = o_col;
+			counter++;
+		}
+	}
+	if (game_state[o_line - 1][o_col + 1].getPlayer() == 2) {
+		if (game_state[o_line - 2][o_col + 2].getPlayer() == 0) {
+			lines[counter] = o_line - 2;
+			columns[counter] = o_col + 2;
+			counter++;
+		}
+	}
+	if (game_state[o_line][o_col + 1].getPlayer() == 2) {
+		if (game_state[o_line][o_col + 2].getPlayer() == 0) {
+			lines[counter] = o_line;
+			columns[counter] = o_col + 2;
+			counter++;
+		}
+	}
+
+
+	if (counter == 1) {
+		cout << endl << "You can capture another piece, and that's mandatory" << endl;
+		cout << "As you just have one piece to capture, that's automatic!" << endl;
+		move_player1(o_line + 1, (char)(o_col + 65), lines[0] + 1, (char)(columns[0] + 65));
+	}
+	else if (counter > 1) {
+		int selected;
+		cout << endl << "You can capture another piece, and that's mandatory" << endl;
+		cout << "You have more than one piece that can be captured, so you have to chose one!" << endl;
+
+		for (int i = 0; i < counter; i++) {
+			cout << endl << "Spaces available to move and capture:" << endl;
+			cout << i+1 << " - [" << lines[i] << "][" << columns[i] << "]" << endl;
+		}
+		cout << "Select one space to move your piece!";
+		cin >> selected;
+		move_player1(o_line + 1, (char)(o_col + 65), lines[selected - 1] + 1, (char)(columns[selected - 1] + 65));
+	}
+	else {
+		//do nothing, no piece to be captured
 	}
 }
 
