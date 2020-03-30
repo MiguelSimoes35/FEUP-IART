@@ -560,21 +560,23 @@ void Board::generateTree(bool player1) {
 									tmpBoard.new_checkers_c1();
 								}
 								root->children.push_back(newNode(NULL, 3, firstpl + 1, colToChar(firstpc), aux1l + 1, colToChar(aux1c)));
+								Board tmpBoard69;
+								tmpBoard69 = tmpBoard;
 								//second play - adv's play
 								for (int secondpl = 0; secondpl < 8; secondpl++) {
 									for (int secondpc = 0; secondpc < 8; secondpc++) {
-										if (tmpBoard.getCell(secondpl, secondpc).getPlayer() == 2) {
+										if (tmpBoard69.getCell(secondpl, secondpc).getPlayer() == 2) {
 											for (int aux2l = 0; aux2l < 8; aux2l++) {
 												for (int aux2c = 0; aux2c < 8; aux2c++) {
-													if (tmpBoard.check_free(aux2l + 1, colToChar(aux2c)) && tmpBoard.can_move_player1(secondpl + 1, colToChar(secondpc), aux2l + 1, colToChar(aux2c))) {
-														tmpBoard.move_player1(secondpl + 1, colToChar(secondpc), aux2l + 1, colToChar(aux2c));
+													if (tmpBoard69.check_free(aux2l + 1, colToChar(aux2c)) && tmpBoard69.can_move_player2(secondpl + 1, colToChar(secondpc), aux2l + 1, colToChar(aux2c))) {
+														tmpBoard69.move_player2(secondpl + 1, colToChar(secondpc), aux2l + 1, colToChar(aux2c));
 														if (aux2l == 7) {
-															tmpBoard.reach_endzone((aux2l + 1), colToChar(aux2c));
-															tmpBoard.new_checkers_c2();
+															tmpBoard69.reach_endzone((aux2l + 1), colToChar(aux2c));
+															tmpBoard69.new_checkers_c2();
 														}
 														root->children.at(child)->children.push_back(newNode(NULL, 2, secondpl + 1, colToChar(secondpc), aux2l + 1, colToChar(aux2c)));
 														Board tmpBoard2;
-														tmpBoard2 = tmpBoard;
+														tmpBoard2 = tmpBoard69;
 														//third play - computer's play
 														for (int thirdpl = 0; thirdpl < 8; thirdpl++) {
 															for (int thirdpc = 0; thirdpc < 8; thirdpc++) {
@@ -596,13 +598,15 @@ void Board::generateTree(bool player1) {
 																						if (tmpBoard3.getCell(fourthpl, fourthpc).getPlayer() == 2) {
 																							for (int aux4l = 0; aux4l < 8; aux4l++) {
 																								for (int aux4c = 0; aux4c < 8; aux4c++) {
-																									if (tmpBoard3.check_free(aux4l + 1, colToChar(aux4c)) && tmpBoard3.can_move_player1(fourthpl + 1, colToChar(fourthpc), aux4l+1, colToChar(aux4c))) {
-																										tmpBoard3.move_player1(fourthpl + 1, colToChar(fourthpc), aux4l + 1, colToChar(aux4c));
+																									if (tmpBoard3.check_free(aux4l + 1, colToChar(aux4c)) && tmpBoard3.can_move_player2(fourthpl + 1, colToChar(fourthpc), aux4l+1, colToChar(aux4c))) {
+																										tmpBoard3.move_player2(fourthpl + 1, colToChar(fourthpc), aux4l + 1, colToChar(aux4c));
 																										if (aux4l == 7) {
 																											tmpBoard3.reach_endzone(aux4l + 1, colToChar(aux4c));
 																											tmpBoard3.new_checkers_c2();
 																										}
 																										root->children.at(child)->children.at(grandchild)->children.at(bigrandchild)->children.push_back(newNode(tmpBoard.evalGameState(true), 0, fourthpl + 1, colToChar(fourthpc), aux4l + 1, colToChar(aux4c)));
+																										//tmpBoard69 = tmpBoard;
+																										tmpBoard3 = tmpBoard2;
 																									}
 																								}
 																							}
@@ -610,7 +614,7 @@ void Board::generateTree(bool player1) {
 																					}
 																				}
 
-																				tmpBoard3 = tmpBoard2;
+																				tmpBoard2 = tmpBoard69;
 																				bigrandchild++;
 																			}
 																		}
@@ -619,7 +623,7 @@ void Board::generateTree(bool player1) {
 															}
 														}
 														
-														tmpBoard2 = tmpBoard;
+														tmpBoard69 = tmpBoard;
 														grandchild++;
 														bigrandchild = 0;
 													}
@@ -1019,7 +1023,6 @@ void Board::generateTree_d1(bool player1) {
 	tmpBoard = *this;
 
 	int child = 0;
-
 	if (player1) {
 		//first play - computer's play
 		for (int firstpl = 0; firstpl < 8; firstpl++) {
@@ -1034,19 +1037,23 @@ void Board::generateTree_d1(bool player1) {
 									tmpBoard.new_checkers_c1();
 								}
 								root->children.push_back(newNode(NULL, 1, firstpl + 1, colToChar(firstpc), aux1l + 1, colToChar(aux1c)));
+								Board tmpBoard2;
+								tmpBoard2 = tmpBoard;
 								//second play - adv's play
 								for (int secondpl = 0; secondpl < 8; secondpl++) {
 									for (int secondpc = 0; secondpc < 8; secondpc++) {
-										if (tmpBoard.getCell(secondpl, secondpc).getPlayer() == 2) {
+										if (tmpBoard2.getCell(secondpl, secondpc).getPlayer() == 2) {
 											for (int aux2l = 0; aux2l < 8; aux2l++) {
 												for (int aux2c = 0; aux2c < 8; aux2c++) {
-													if (tmpBoard.check_free(aux2l + 1, colToChar(aux2c)) && tmpBoard.can_move_player1(secondpl + 1, colToChar(secondpc), aux2l + 1, colToChar(aux2c))) {
-														tmpBoard.move_player1(secondpl + 1, colToChar(secondpc), aux2l + 1, colToChar(aux2c));
+													if (tmpBoard2.check_free(aux2l + 1, colToChar(aux2c)) && tmpBoard2.can_move_player2(secondpl + 1, colToChar(secondpc), aux2l + 1, colToChar(aux2c))) {
+														
+														tmpBoard2.move_player2(secondpl + 1, colToChar(secondpc), aux2l + 1, colToChar(aux2c));
 														if (aux2l == 7) {
-															tmpBoard.reach_endzone((aux2l + 1), colToChar(aux2c));
-															tmpBoard.new_checkers_c2();
+															tmpBoard2.reach_endzone((aux2l + 1), colToChar(aux2c));
+															tmpBoard2.new_checkers_c2();
 														}
-														root->children.at(child)->children.push_back(newNode(tmpBoard.evalGameState(true), 0, secondpl + 1, colToChar(secondpc), aux2l + 1, colToChar(aux2c)));
+														root->children.at(child)->children.push_back(newNode(tmpBoard2.evalGameState(true), 0, secondpl + 1, colToChar(secondpc), aux2l + 1, colToChar(aux2c)));
+														tmpBoard2 = tmpBoard;
 													}
 												}
 											}
@@ -1149,5 +1156,7 @@ void Board::generateTree_d1(bool player1) {
 			reach_endzone(root->children.at(chosen_child)->d_lin, root->children.at(chosen_child)->d_col);
 			new_checkers_c2();
 		}
+
+		
 	}
 }
