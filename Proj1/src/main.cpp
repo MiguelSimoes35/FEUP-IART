@@ -7,7 +7,9 @@ using namespace std;
 int main() {
 	Game game;
 
-	game.start();
+	opening_menu();
+	int mode = start_menu();
+	game.start(mode);
 
 	system("pause");
 

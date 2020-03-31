@@ -12,6 +12,6 @@ class Game {
 	Player player2;
 public:
 	Game();
-	void start();
+	void start(int option);
 	void pvp();
 };

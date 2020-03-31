@@ -5,16 +5,34 @@
 using namespace std;
 
 void opening_menu() {
+	cout << "                                             " << endl;
+	cout << "          _______  __ ______  _________      " << endl;
+	cout << "         / ____/ |/ //  _/  |/  / __  /      " << endl;
+	cout << "        / __/  |   / / // /|_/ / / / /       " << endl;
+	cout << "       / /___ /   /_/ // /  / / /_/ /        " << endl;
+	cout << "      /_____//_/|_/___/_/  /_/_____/         " << endl;
+	cout << "                                             " << endl;
+	cout << "                                             " << endl;
+	cout << "                                             " << endl;
+	system("pause");
+	system("CLS");
+}
+
+int start_menu() {
 	
 	int option;
 	
-	cout  << "WELCOME" << endl << endl;
-	cout << "1 - PvP" << endl;
-	cout << "2 - PvC" << endl;
-	cout << "3 - CvC" << endl;
-	cout << "4 - LEAVE" << endl;
+	cout << " ___________________________________________ " << endl;
+	cout << "|                                           |" << endl;
+	cout << "|                  WELCOME                  |" << endl;
+	cout << "|                                           |" << endl;
+	cout << "|      1 - PvP                              |" << endl;
+	cout << "|      2 - PvC                              |" << endl;
+	cout << "|      3 - CvC                              |" << endl;
+	cout << "|      4 - LEAVE                            |" << endl;
+	cout << "|___________________________________________|" << endl << endl;
 
-	cout << "-> ";
+	cout << "Option-> ";
 	cin >> option;
 
 	while (1) {
@@ -29,6 +47,22 @@ void opening_menu() {
 		if (!cin.fail()) {
 			break;
 		}
+	}
+
+	if (option == 1) {
+		system("CLS");
+		return 1;
+	}
+	else if (option == 2) {
+		system("CLS");
+		return 2;
+	}
+	else if (option == 3) {
+		system("CLS");
+		return 3;
+	}
+	else {
+		exit(1);
 	}
 }
 

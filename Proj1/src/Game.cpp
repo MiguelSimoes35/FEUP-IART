@@ -4,8 +4,19 @@ Game::Game(){
 
 }
 
-void Game::start() {
-	pvp();
+void Game::start(int option) {
+	if (option == 1) {
+		pvp();
+	}
+	else if (option == 2) {
+
+	}
+	else if (option == 3) {
+
+	}
+	else {
+
+	}
 }
 
 void Game::pvp() {
