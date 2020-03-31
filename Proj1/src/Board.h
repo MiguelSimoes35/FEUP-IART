@@ -30,4 +30,8 @@ public:
 	void new_checkers_c1();
 	void new_checkers_c2();
 	void generateTree_d1(bool player1);
+	void generateTree_d2(bool player1);
+
+	void recapture_player1(int o_line, int o_col);
+	void recapture_player2(int o_line, int o_col);
 };
