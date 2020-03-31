@@ -519,6 +519,7 @@ void Game::cvc() {
 
 
 			b.generateTree_d2(true);
+			system("cls");
 			b.display_board();
 
 
@@ -526,8 +527,8 @@ void Game::cvc() {
 				cout << endl << "HE HAVE A WINNER: Player 1 won the game!" << endl;
 				break;
 			}
-
 			b.generateTree_d1(false);
+			system("cls");
 			b.display_board();
 
 			if (b.count_p2_pieces() == 0) {

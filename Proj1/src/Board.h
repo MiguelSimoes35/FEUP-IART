@@ -22,6 +22,7 @@ public:
 
 	//to be used by the computer
 	int evalGameState(bool player1);
+	int evalGameState2(bool player1);
 	void generateTree(bool player1);
 	char colToChar(int col);
 	bool can_move_player1(int o_line, char o_col, int d_line, char d_col);

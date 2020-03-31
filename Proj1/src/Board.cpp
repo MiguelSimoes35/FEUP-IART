@@ -536,6 +536,75 @@ int Board::evalGameState(bool player1) {
 	return ret;
 }
 
+int Board::evalGameState2(bool player1) {
+
+	int ret = 0;
+
+	if (player1) {
+		
+		if (count_p2_pieces() < 2) {
+			//for (int i = 0; i < 8; i++) {
+			//	for (int j = 0; j < 8; j++) {
+			//		if (game_state[i][j].getPlayer() == 1) {
+			//			ret += 5;
+			//			if (i < 7 && j < 7 && game_state[i + 1][j + 1].getPlayer() == 1) {
+			//				ret += 5;
+			//			}
+			//			//ret += (8 - i);
+			//		}
+			//		else if (game_state[i][j].getPlayer() == 2) {
+			//			ret -= 200;
+			//			//ret -= (i + 1);
+			//		}
+			//	}
+			//}
+			ret = 200;
+		}
+		else {
+			for (int i = 0; i < 8; i++) {
+				for (int j = 0; j < 8; j++) {
+					if (game_state[i][j].getPlayer() == 1) {
+						ret += 5;
+						if (j == 0 || j == 7) {
+							ret += 5;
+						}
+						//ret += (8 - i);
+					}
+					else if (game_state[i][j].getPlayer() == 2) {
+						ret -= 10;
+						//ret -= (i + 1);
+					}
+				}
+			}
+		}
+
+		if (count_p2_pieces() < 1) {
+			ret = 100000;
+		}
+	}
+	else {
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				if (game_state[i][j].getPlayer() == 2) {
+					ret += 5;
+					if (j == 0 || j == 7) {
+						ret += 5;
+					}
+					//ret += (i + 1);
+				}
+				else if (game_state[i][j].getPlayer() == 1) {
+					ret -= 5;
+					
+					//ret -= (8 - i);
+				}
+			}
+		}
+	}
+
+
+	return ret;
+}
+
 void Board::generateTree(bool player1) {
 	Node* root = newNode(NULL, 4, 0, 0, 0, 0);
 
@@ -1347,7 +1416,7 @@ void Board::generateTree_d2(bool player1) {
 																					tmpBoard3.reach_endzone(aux3l + 1, colToChar(aux3c));
 																					tmpBoard3.new_checkers_c1();
 																				}
-																				root->children.at(child)->children.at(grandchild)->children.push_back(newNode(tmpBoard3.evalGameState(true), 0, thirdpl + 1, colToChar(thirdpc), aux3l + 1, colToChar(aux3c)));
+																				root->children.at(child)->children.at(grandchild)->children.push_back(newNode(tmpBoard3.evalGameState2(true), 0, thirdpl + 1, colToChar(thirdpc), aux3l + 1, colToChar(aux3c)));
 																				tmpBoard3 = tmpBoard2;
 																				
 																			}
@@ -1377,7 +1446,7 @@ void Board::generateTree_d2(bool player1) {
 		}
 
 		//appplying minimax to the generated tree
-		int choice = minimaxAB(root, 3, -1000, 1000, true);
+		int choice = minimaxAB(root, 3, -10000, 10000, true);
 		int chosen_child = 0;
 		for (int i = 0; i < root->children.size(); i++) {
 			for (int j = 0; j < root->children.at(i)->children.size(); j++) {
@@ -1389,16 +1458,63 @@ void Board::generateTree_d2(bool player1) {
 			}
 		}
 
-		//realizing the play
-		move_player1(root->children.at(chosen_child)->o_lin,
-			root->children.at(chosen_child)->o_col,
-			root->children.at(chosen_child)->d_lin,
-			root->children.at(chosen_child)->d_col);
-		if (root->children.at(chosen_child)->d_lin == 1) {
-			reach_endzone(root->children.at(chosen_child)->d_lin, root->children.at(chosen_child)->d_col);
-			new_checkers_c1();
+		tmpBoard = *this;
+		bool foundfaster = false;
+		for (int firstpl = 0; firstpl < 8; firstpl++) {
+			for (int firstpc = 0; firstpc < 8; firstpc++) {
+				if (tmpBoard.getCell(firstpl, firstpc).getPlayer() == 1) {
+					for (int aux1l = 0; aux1l < 8; aux1l++) {
+						for (int aux1c = 0; aux1c < 8; aux1c++) {
+							if (tmpBoard.check_free(aux1l + 1, colToChar(aux1c)) && tmpBoard.can_move_player1(firstpl + 1, colToChar(firstpc), aux1l + 1, colToChar(aux1c))) {
+								tmpBoard.move_player1(firstpl + 1, colToChar(firstpc), aux1l + 1, colToChar(aux1c));
+								if (aux1l == 0) {
+									tmpBoard.reach_endzone((aux1l + 1), colToChar(aux1c));
+									tmpBoard.new_checkers_c1();
+								}
+								if (tmpBoard.evalGameState2(true) == choice) {
+									move_player1(firstpl + 1, colToChar(firstpc), aux1l + 1, colToChar(aux1c));
+									if (aux1l == 0) {
+										reach_endzone(aux1l + 1, colToChar(aux1c));
+										new_checkers_c1();
+									}
+									foundfaster = true;
+								}
+								tmpBoard = *this;
+							}
+							if (foundfaster) {
+								break;
+							}
+						}
+						if (foundfaster) {
+							break;
+						}
+					}
+					if (foundfaster) {
+						break;
+					}
+				}
+				if (foundfaster) {
+					break;
+				}
+			}
+			if (foundfaster) {
+				break;
+			}
 		}
 
+		if (!foundfaster) {
+			//realizing the play
+			move_player1(root->children.at(chosen_child)->o_lin,
+				root->children.at(chosen_child)->o_col,
+				root->children.at(chosen_child)->d_lin,
+				root->children.at(chosen_child)->d_col);
+			if (root->children.at(chosen_child)->d_lin == 1) {
+				reach_endzone(root->children.at(chosen_child)->d_lin, root->children.at(chosen_child)->d_col);
+				new_checkers_c1();
+			}
+		}
+		
+		
 	}
 	else {
 		//first play - computer's play
@@ -1471,3 +1587,4 @@ void Board::generateTree_d2(bool player1) {
 
 	}
 }
+
