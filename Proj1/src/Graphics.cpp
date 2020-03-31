@@ -35,16 +35,15 @@ int start_menu() {
 	cout << "Option-> ";
 	cin >> option;
 
-	while (1) {
-		if (cin.fail()) {
+	while (true) {
+		if (cin.fail() || option > 4 || option < 1) {
 			cin.clear();
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 			cout << "Please enter a valid option" << endl;
-			cout << "-> ";
+			cout << "Option-> ";
 			cin >> option;
 		}
-		
-		if (!cin.fail()) {
+		else if (!cin.fail()) {
 			break;
 		}
 	}
@@ -60,6 +59,44 @@ int start_menu() {
 	else if (option == 3) {
 		system("CLS");
 		return 3;
+	}
+	else {
+		exit(1);
+	}
+}
+
+void end_menu(int winner) {
+	int option;
+
+	cout << " ___________________________________________ " << endl;
+	cout << "|                                           |" << endl;
+	cout << "|                GAME OVER                  |" << endl;
+	cout << "|          Player " << winner << " won the game!           |" << endl;
+	cout << "|                                           |" << endl;
+	cout << "|      1 - Initial menu                     |" << endl;
+	cout << "|      2 - Quit                             |" << endl;
+	cout << "|                                           |" << endl;
+	cout << "|___________________________________________|" << endl << endl;
+
+	cout << "Option-> ";
+	cin >> option;
+
+	while (true) {
+		if (cin.fail() || option > 2 || option < 1) {
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			cout << "Please enter a valid option" << endl;
+			cout << "Option-> ";
+			cin >> option;
+		}
+		else if (!cin.fail()) {
+			break;
+		}
+	}
+
+	if (option == 1) {
+		system("CLS");
+		start_menu();
 	}
 	else {
 		exit(1);
