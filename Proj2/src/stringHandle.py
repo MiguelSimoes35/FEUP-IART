@@ -2,12 +2,10 @@ import re
 from nltk.stem.porter import PorterStemmer
 from nltk.corpus import stopwords
 
-
 def remove_ats(lines_old, lines_new):
     for line in lines_old:
         new = " ".join(filter(lambda x: x[0] != '@', line.split()))
         lines_new.append(new)
-
 
 def stemming(lines_old, lines_new):
     ps = PorterStemmer()

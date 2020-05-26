@@ -9,7 +9,6 @@ from sklearn.metrics import precision_score
 from sklearn.metrics import recall_score
 from sklearn.metrics import f1_score
 from nltk.stem.porter import PorterStemmer
-from nltk.corpus import stopwords
 
 
 def bag_of_words_multi_stats(inputs, target):
@@ -49,19 +48,19 @@ def bag_of_words_multi_input(inputs, target):
     X = vectorizer.fit_transform(df.tweet).toarray()
     y = df.intensity
 
-    # print(vectorizer.get_feature_names())
-    # print(X.shape, y.shape)
+    #print(vectorizer.get_feature_names())
+    #print(X.shape, y.shape)
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.15, random_state=0)
 
-    # print(X_train.shape, y_train.shape)
-    # print(X_test.shape, y_test.shape)
+    #print(X_train.shape, y_train.shape)
+    #print(X_test.shape, y_test.shape)
 
     classifier = MultinomialNB()
     classifier.fit(X_train, y_train)
 
     y_pred = classifier.predict(X_test)
-    # print(y_pred)
+    #print(y_pred)
 
     ps = PorterStemmer()
     tweet = input("Tweet: ")
