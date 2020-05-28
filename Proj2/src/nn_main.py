@@ -1,20 +1,39 @@
+import sys
+
 import neuralNetwork as nn
 import fileHandle as fh
 import stringHandle as sh
 
-filename = 'EI-oc-En-anger-train.txt'
-#filename = 'EI-oc-En-fear-train.txt'
-#filename = 'EI-oc-En-joy-train.txt'
-#filename = 'EI-oc-En-sadness-train.txt'
-
+filename = ''
 tweeties = []
 scores = []
 tweetsoh = []
-tweets = []
 
-fh.parse_tweets(filename, tweeties, scores)
+emotion = input("Specify an emotion (possible emotions are anger, sadness, fear and joy): ")
+
+if emotion == 'anger':
+    filename = 'EI-oc-En-anger-train.txt'
+    fh.parse_tweets_anger(filename, tweeties, scores)
+elif emotion == 'sadness':
+    filename = 'EI-oc-En-sadness-train.txt'
+    fh.parse_tweets_sadness(filename, tweeties, scores)
+elif emotion == 'fear':
+    filename = 'EI-oc-En-fear-train.txt'
+    fh.parse_tweets_fear(filename, tweeties, scores)
+elif emotion == 'joy':
+    filename = 'EI-oc-En-joy-train.txt'
+    fh.parse_tweets_joy(filename, tweeties, scores)
+else:
+    print('Wrong input, aborting')
+    sys.exit()
+
 sh.remove_ats(tweeties, tweetsoh)
 
+tweets = []
 sh.stemming(tweetsoh, tweets)
 
 nn.neural_network_stats(tweets, scores)
+'''
+while True:
+    nn.neural_network_single_tweet(tweets, scores)
+    '''
