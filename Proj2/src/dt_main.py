@@ -32,6 +32,6 @@ sh.remove_ats(tweeties, tweetsoh)
 
 sh.stemming(tweetsoh, tweets)
 
-# nb.bag_of_words_multi_stats(tweets, scores)
+#dt.decisionTree(tweets, scores)
 while True:
     dt.decisionTreeAsking(tweets, scores, emotion)
