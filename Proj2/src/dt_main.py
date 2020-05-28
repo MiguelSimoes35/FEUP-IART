@@ -2,7 +2,7 @@ import decisionTree as dt
 import fileHandle as fh
 import stringHandle as sh
 
-filename = '../test/EI-oc-En-anger-train.txt'
+filename = 'EI-oc-En-anger-train.txt'
 
 tweeties = []
 scores = []
@@ -14,4 +14,5 @@ sh.remove_ats(tweeties, tweetsoh)
 
 sh.stemming(tweetsoh, tweets)
 
-dt.decisionTreeAsking(tweets, scores)
+dt.decisionTree(tweets, scores)
+#dt.decisionTreeAsking(tweets, scores)
