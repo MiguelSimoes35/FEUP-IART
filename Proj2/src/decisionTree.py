@@ -29,7 +29,7 @@ def decisionTree(inputs, target):
     print('F1: ', f1_score(y_test, y_predicted, average='weighted'))
 
 
-def decisionTreeAsking(inputs, target):
+def decisionTreeAsking(inputs, target, emotion):
     df = pd.DataFrame({'tweet': inputs,
                        'intensity': target})
 
@@ -52,4 +52,4 @@ def decisionTreeAsking(inputs, target):
 
     result = emotion_classifier.predict(X)
 
-    print("From 0 to 3, 0 being 'not angry at all' and 3 'very angry', you anger scored ", result)
+    print("From 0 to 3, 0 being ' not", emotion, "at all ' and 3 ' very", emotion, "', your", emotion,  "scored ", result)
